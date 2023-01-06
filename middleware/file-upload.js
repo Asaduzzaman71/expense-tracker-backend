@@ -39,7 +39,6 @@ const upload = multer({
     	fileSize: 2000000, // 1MB
     },
     fileFilter: (req, file, cb) => {
-        console.log(file);
         if (file.fieldname === "images" || file.fieldname === "profile_pic") {
             if ( file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
                 cb(null, true);

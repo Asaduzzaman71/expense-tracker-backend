@@ -1,30 +1,29 @@
 const User = require('../models/User');
+const {saveUser} = require('../services/userService');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const bcrypt = require('bcrypt');
+const {  validationResult } = require('express-validator');
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 
 const register = async (req, res) => {
-    const profile_pic = req.file.filename
-    const { firstName: first_name, lastName: last_name, email, password, role, email_verification_token, is_email_verified } = req.body;
-    const emailAlreadyExists = await User.findOne({ where: { email: email } });
-    if (emailAlreadyExists) {
-        throw new CustomError.BadRequestError('Email already exists');
+    const result = saveUser(req)
+    console.log(result)
+    if(result.status==404){
+        throw new CustomError.BadRequestError(result.message);
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ first_name, last_name, email, password, role, profile_pic, email_verification_token, is_email_verified });
-    const tokenUser = createTokenUser(user);
+    const tokenUser = createTokenUser(result.data);
     attachCookiesToResponse({ res, user: tokenUser });
     res.status(StatusCodes.CREATED).json({ user: tokenUser });
 };
 const login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        throw new CustomError.BadRequestError('Please provide email and password');
+      throw new CustomError.BadRequestError('Please provide email and password');
     }
     const user = await User.findOne({ where: { email: email } });
     if (!user) {
-        throw new CustomError.UnauthenticatedError('Invalid Credentials');
+      throw new CustomError.UnauthenticatedError('Invalid Credentials');
     }
     const isPasswordCorrect = await user.comparePassword(password);
     if (!isPasswordCorrect) {

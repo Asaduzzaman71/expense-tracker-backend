@@ -8,7 +8,7 @@ var cookieParser = require('cookie-parser');
 const app = express();
 
 const sequelize = require('./config/database');
-const authRouter = require('./routes/authRoute');
+const authRouter = require('./routes/userRoute');
 
 
 const notFoundMiddleware = require('./middleware/not-found');
