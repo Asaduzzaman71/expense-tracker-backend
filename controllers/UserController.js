@@ -7,9 +7,8 @@ const {  validationResult } = require('express-validator');
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 
 const register = async (req, res) => {
-    const result = saveUser(req)
-    console.log(result)
-    if(result.status==404){
+    const result = await saveUser(req)
+    if(result.status == 400){
         throw new CustomError.BadRequestError(result.message);
     }
     const tokenUser = createTokenUser(result.data);
