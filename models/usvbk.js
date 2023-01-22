@@ -23,11 +23,9 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: false
         },
     }, {
-        sequelize,
-        modelName: 'UserVerify',
     });
     UserVerify.associate = function (models) {
-        UserVerify.belongsTo(models.User, { foreignKey: 'userId', as: 'user' })
+        UserVerify.belongsTo(models.User, { as: 'user' })
     };
-    return User;
+    return UserVerify;
 };
