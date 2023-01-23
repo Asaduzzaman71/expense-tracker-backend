@@ -1,6 +1,7 @@
 
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
+const UserVerify = require('./UserVerify');
 class User extends Model {
   /**
    * Helper method for defining associations.
@@ -8,7 +9,10 @@ class User extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    this.belongsTo(models.UserVerify, {
+      foreignKey: 'userId',
+      as: 'userVerify'
+    })
   }
 }
 User.init({
