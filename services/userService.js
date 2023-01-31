@@ -29,24 +29,20 @@ const randomNumber = (min, max) => {
 const saveUser = async (req) => {
     //check email existance
     const emailAlreadyExist = await getUserByEmail(req);
-    if (emailAlreadyExist) {
+    if (emailAlreadyExist){
         return { status: 400, message: "Email already exists" }
     }
     //hashed password before save into db
     req.body.password = await bcrypt.hash(req.body.password, 10);
-
     const token = randomNumber(100000, 999999);
-
     // req.body.profile_pic = req.file.filename
     const user = await createOrUpdateUser(req, token)
-   
     // var mailOptions = {
     //     from: 'rabbimahmud95@gmail.com',
     //     to: 'rabbyasaduzzaman@gmail.com',
     //     subject: 'Sending Email using Node.js',
     //     text: 'That was easy!'
     // };
-
     // transporter.sendMail(mailOptions, function (error, info) {
     //     if (error) {
     //         console.log(error);
@@ -54,8 +50,23 @@ const saveUser = async (req) => {
     //         console.log('Email sent: ' + info.response);
     //     }
     // });
-
     return { status: 201, message: 'User saved successfully', data: user }
 };
 
-module.exports = { saveUser}
+const signIn = async (req) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return { status: 400, message: "Please provide email and password" }
+    }
+    const user = await getUserByEmail(req);
+    if (!user) {
+        return { status: 401, message: "Invalid Credentials" }
+    }
+    const isPasswordCorrect = await bcrypt.compare( password, user.password );
+    if ( !isPasswordCorrect ) {
+        return { status: 401, message: "Invalid Credentials" }
+    }
+    return { status: 200, data: user }
+};
+
+module.exports = { saveUser, signIn }
