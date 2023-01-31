@@ -41,7 +41,7 @@ const saveUser = async (req) => {
     //     from: 'rabbimahmud95@gmail.com',
     //     to: 'rabbyasaduzzaman@gmail.com',
     //     subject: 'Sending Email using Node.js',
-    //     text: 'That was easy!'
+    //     html: `<h1>Welcome</h1>Use the following OTP to verify email<p>${token}</p>`
     // };
     // transporter.sendMail(mailOptions, function (error, info) {
     //     if (error) {

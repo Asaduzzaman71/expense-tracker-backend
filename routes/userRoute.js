@@ -4,9 +4,9 @@ const router = express.Router();
 const {registrationDataValidation} = require('../validations/userValidation');
 const { validateRequestSchema } = require('../middleware/validate-request');
 const { register, login, logout } = require('../controllers/UserController');
-
+const { authenticateUser, authorizePermissions } = require('../middleware/authentication');
 router.post('/register', upload.single('profile_pic') , registrationDataValidation, validateRequestSchema , register);
 router.post('/login', login);
-router.get('/logout', logout);
+router.get('/logout', authenticateUser, logout);
 
 module.exports = router;
