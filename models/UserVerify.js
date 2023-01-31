@@ -11,6 +11,7 @@ class UserVerify extends Model {
         // define association here
         this.belongsTo(models.User, {
             foreignKey: "userID",
+            as: 'user'
         });
     }
 }
@@ -40,4 +41,4 @@ UserVerify.init({
     sequelize,
     modelName: 'UserVerify',
 });
-module.exports = UserVerify;
+module.exports = UserVerify ;

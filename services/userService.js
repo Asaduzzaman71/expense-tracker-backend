@@ -40,20 +40,20 @@ const saveUser = async (req) => {
     // req.body.profile_pic = req.file.filename
     const user = await createOrUpdateUser(req, token)
    
-    var mailOptions = {
-        from: 'rabbimahmud95@gmail.com',
-        to: 'rabbyasaduzzaman@gmail.com',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
-    };
+    // var mailOptions = {
+    //     from: 'rabbimahmud95@gmail.com',
+    //     to: 'rabbyasaduzzaman@gmail.com',
+    //     subject: 'Sending Email using Node.js',
+    //     text: 'That was easy!'
+    // };
 
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //     if (error) {
+    //         console.log(error);
+    //     } else {
+    //         console.log('Email sent: ' + info.response);
+    //     }
+    // });
 
     return { status: 201, message: 'User saved successfully', data: user }
 };

@@ -3,17 +3,7 @@ const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 const UserVerify = require('./UserVerify');
 class User extends Model {
-  /**
-   * Helper method for defining associations.
-   * This method is not a part of Sequelize lifecycle.
-   * The `models/index` file will call this method automatically.
-   */
-  static associate(models) {
-    this.belongsTo(models.UserVerify, {
-      foreignKey: 'userId',
-      as: 'userVerify'
-    })
-  }
+
 }
 User.init({
   id: {
@@ -54,4 +44,8 @@ User.init({
   sequelize,
   modelName: 'User',
 });
+User.hasOne(UserVerify, {
+      foreignKey: 'userId',
+      as: 'userVerify'
+    })
 module.exports = User;

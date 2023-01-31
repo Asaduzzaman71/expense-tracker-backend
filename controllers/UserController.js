@@ -12,8 +12,8 @@ const register = async (req, res) => {
         throw new CustomError.BadRequestError(result.message);
     }
     const tokenUser = createTokenUser(result.data);
-    attachCookiesToResponse({ res, user: tokenUser });
-    res.status(StatusCodes.CREATED).json({ user: tokenUser });
+    attachCookiesToResponse({ res, user: result.data });
+    res.status(StatusCodes.CREATED).json({ user: result.data });
 };
 const login = async (req, res) => {
     const { email, password } = req.body;
