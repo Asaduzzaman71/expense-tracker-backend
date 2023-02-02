@@ -1,13 +1,10 @@
-const User = require('../models/User');
-const {saveUser,signIn} = require('../services/userService');
+
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
-const bcrypt = require('bcrypt');
-const {  validationResult } = require('express-validator');
+const { saveUser, signIn, verifyUserEmail } = require('../services/userService');
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 
 const register = async (req, res) => {
-    const result = await saveUser(req)
     if(result.status == 400){
         throw new CustomError.BadRequestError(result.message);
     }
@@ -15,23 +12,6 @@ const register = async (req, res) => {
     attachCookiesToResponse({ res, user: tokenUser });
     res.status(StatusCodes.CREATED).json({ user: result.data });
 };
-// const login = async (req, res) => {
-//     const { email, password } = req.body;
-//     if (!email || !password) {
-//       throw new CustomError.BadRequestError('Please provide email and password');
-//     }
-//     const user = await User.findOne({ where: { email: email } });
-//     if (!user) {
-//       throw new CustomError.UnauthenticatedError('Invalid Credentials');
-//     }
-//     const isPasswordCorrect = await user.comparePassword(password);
-//     if (!isPasswordCorrect) {
-//         throw new CustomError.UnauthenticatedError('Invalid Credentials');
-//     }
-//     const tokenUser = createTokenUser(user);
-//     attachCookiesToResponse({ res, user: tokenUser });
-//     res.status(StatusCodes.OK).json({ user: tokenUser });
-// };
 const login = async (req, res) => {
     const result = await signIn( req )
     if ( result.status == 400 ){
@@ -51,9 +31,18 @@ const logout = async (req, res) => {
     });
     res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
 };
+const verifyEmail = async ( req, res ) => {
+    const result = await verifyUserEmail( req );
+    if( result.status == 200 ){
+        res.status(StatusCodes.OK).json( result );
+    }else{
+        throw new CustomError.BadRequestError(result.message);
+    }
+}
 
 module.exports = {
     register,
     login,
     logout,
+    verifyEmail
 };

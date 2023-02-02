@@ -22,4 +22,11 @@ const getUserByEmail = async (req) => {
         })
     return user
 };
-module.exports = { createOrUpdateUser, getUserByEmail }
+const verifyAccountByUserId = async ( userId ) => {
+    const result = await UserVerify.update(
+       { isEmailVerified : true },
+       { where: { userId : userId },
+    })
+    return result
+}
+module.exports = { createOrUpdateUser, getUserByEmail, verifyAccountByUserId }

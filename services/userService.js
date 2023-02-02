@@ -3,7 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const bcrypt = require('bcrypt');
 const { transporter } = require('../config/email');
-const { createOrUpdateUser , getUserByEmail } = require('../repositories/userRepository');
+const { createOrUpdateUser, getUserByEmail, verifyAccountByUserId } = require('../repositories/userRepository');
 
 // const saveUser = async (req) => {
 //     //check email existance
@@ -69,4 +69,21 @@ const signIn = async (req) => {
     return { status: 200, data: user }
 };
 
-module.exports = { saveUser, signIn }
+const verifyUserEmail = async ( req ) => {
+    if (!req.body.email || !req.body.otp) {
+        return { status: 400, message: "Invalid request" }
+    }
+    const user = await getUserByEmail(req);
+    if ( user){
+        if (user.userVerify.emailVerificationToken == req.body.otp ){
+            const result = await verifyAccountByUserId( user.id )
+            if( result ){
+                return { status: 200, message: "Email verified successfully" }
+            }else{
+                return { status: 400, message: "Invalid OTP" }
+            }
+        }
+    }
+}
+
+module.exports = { saveUser, signIn, verifyUserEmail }
