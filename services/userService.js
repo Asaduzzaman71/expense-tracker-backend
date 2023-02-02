@@ -66,6 +66,9 @@ const signIn = async (req) => {
     if ( !isPasswordCorrect ) {
         return { status: 401, message: "Invalid Credentials" }
     }
+    if ( user.userVerify.isEmailVerified == false ) {
+        return { status: 401, message: "Account verification pending" }
+    }
     return { status: 200, data: user }
 };
 
