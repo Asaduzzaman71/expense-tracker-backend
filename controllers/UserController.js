@@ -5,6 +5,7 @@ const { saveUser, signIn, verifyUserEmail } = require('../services/userService')
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 
 const register = async (req, res) => {
+    let result = await saveUser(req);
     if(result.status == 400){
         throw new CustomError.BadRequestError(result.message);
     }
@@ -12,6 +13,7 @@ const register = async (req, res) => {
     attachCookiesToResponse({ res, user: tokenUser });
     res.status(StatusCodes.CREATED).json({ user: result.data });
 };
+
 const login = async (req, res) => {
     const result = await signIn( req )
     if ( result.status == 400 ){

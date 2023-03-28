@@ -2,13 +2,12 @@ require('dotenv').config();
 require('express-async-errors');
 const multer = require("multer");
 const express = require('express');
-
 var cookieParser = require('cookie-parser');
-
 const app = express();
-
 const sequelize = require('./config/database');
+//all routes
 const authRouter = require('./routes/userRoute');
+const categoryRouter = require('./routes/categoryRoute');
 
 
 const notFoundMiddleware = require('./middleware/not-found');
@@ -18,7 +17,10 @@ const {authenticateUser,authorizePermissions} = require('./middleware/authentica
 // middleware
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
+
+
 app.use('/api/auth', authRouter);
+app.use('/api/categories', categoryRouter);
 
 
 app.use(notFoundMiddleware);
