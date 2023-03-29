@@ -1,11 +1,11 @@
 const { createOrUpdateCategory,} = require('../repositories/categoryRepository');
 const { createSlug } = require('../utils')
 const Category = require('../models/Category');
-const show = async (req) => {
+const show = async (id) => {
     try {
         const category = await Category.findOne({
             where: {
-                'id': req.params.id
+                'id': id
             }
         });
         if (category){
@@ -17,7 +17,7 @@ const show = async (req) => {
         return error
     }
 };
-const list = async (req) => {
+const list = async () => {
     try {
         const categories = await Category.findAll();
         return { status: 200, message: 'categories found', data: categories }

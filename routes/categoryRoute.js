@@ -4,11 +4,14 @@ const { categoryValidation } = require('../validations/categoryValidation');
 const { validateRequestSchema } = require('../middleware/validate-request');
 const {
     createCategory,
-    updateCategory
+    updateCategory,
+    getSingleCategory,
+    getAllCategories
+
 
 } = require('../controllers/CategoryController');
 
-router.post('/', categoryValidation, validateRequestSchema, createCategory);
-router.route('/:id').patch(categoryValidation, updateCategory);
+router.route('/').post( categoryValidation, validateRequestSchema, createCategory).get(getAllCategories);
+router.route('/:id').patch(categoryValidation, updateCategory).get(getSingleCategory);
 
 module.exports = router

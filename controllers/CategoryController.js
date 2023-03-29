@@ -5,9 +5,9 @@ const { create, update , list, show} = require('../services/categoryService');
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 
 const getSingleCategory = async (req, res) => {
-    const result = await show( req );
+    const result = await show( req.params.id );
     if (result.status == 200) {
-        res.status(StatusCodes.SUCCESS).json({ message: result.message, data: result.data });
+        res.status(StatusCodes.OK).json({ message: result.message, data: result.data });
     } else {
         res.status(StatusCodes.NOT_FOUND).json({ data: result.data });
     }
@@ -16,7 +16,7 @@ const getAllCategories = async (req, res) => {
     try {
         const result = await list();
         if (result.status == 200) {
-            res.status(StatusCodes.SUCCESS).json({ message: result.message, data: result.data });
+            res.status(StatusCodes.OK).json({ message: result.message, data: result.data });
         } else {
             res.status(StatusCodes.NOT_FOUND).json({ data: result.data });
         }
@@ -64,5 +64,7 @@ try{
 
 module.exports = {
     createCategory,
-    updateCategory
+    updateCategory,
+    getAllCategories,
+    getSingleCategory
 };
