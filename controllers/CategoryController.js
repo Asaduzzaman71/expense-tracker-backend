@@ -1,7 +1,7 @@
 
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
-const { create, update , list, show} = require('../services/categoryService');
+const { create, update , list, show} = require('../services/expenseService');
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 
 const getSingleCategory = async (req, res) => {
